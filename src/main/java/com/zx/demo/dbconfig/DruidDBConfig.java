@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+/**
+ * zhangxia
+ */
 @Configuration
 public class DruidDBConfig {
     private Logger logger = Logger.getLogger(DruidDBConfig.class);
