@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zx.mapper.WorkerMapper">
+
+   <insert id="save">
+      INSERT INTO worker(id,name,age,address,salary,join_date)
+        VALUES (#{id},#{name},#{age},#{address},#{salary},#{date})
+   </insert>
+<!--    http://localhost:8080/worker/register?id=6&name=zx&age=23&address=xian&salary=500&date=2019/9/29-->
+
+        <!--修改用户-->
+    <update id="update" >
+    UPDATE worker set name=#{name},age=#{age},address=#{address},salary=#{salary},join_date = #{date} WHERE id=#{id}
+    </update>
+<!--    http://localhost:8080/worker/update?id=6&name=zxx&age=24&address=xian&salary=5000&date=2019/9/29-->
+
+
+        <!--删除用户-->
+    <delete id="delete" >
+    DELETE FROM worker WHERE id=#{id}
+    </delete>
+<!--    http://localhost:8080/worker/delete?id=6-->
+
+    <select id="findById" resultType="com.zx.demo.model.Worker">
+        SELECT * FROM worker WHERE id = #{id}
+    </select>
+<!--    http://localhost:8080/worker/find?id=6-->
+
+
+<!--    &lt;!&ndash;通过包装类查询用户&ndash;&gt;-->
+<!--    <select id="findUserByUserQueryVo" parameterType="userQueryVO" resultType="Worker">-->
+<!--        SELECT u.* FROM user u WHERE u.id = #{user.id}-->
+
+<!--    </select>-->
+
+<!--    &lt;!&ndash;通过Map查询数据&ndash;&gt;-->
+<!--    <select id="findUserByMap" parameterType="hashmap" resultType="Worker">-->
+<!--        SELECT u.* FROM user u WHERE username LIKE '%${username}%' AND sex = #{sex}-->
+<!--    </select>-->
+
+
+
+
+
+
+<!--    &lt;!&ndash;1 设置返回数据为基本类型,int,double,long,string....&ndash;&gt;-->
+<!--    &lt;!&ndash; 查询用户的个数 &ndash;&gt;-->
+<!--    <select id="findUserCount" parameterType="userQueryVO" resultType="int">-->
+<!--        SELECT COUNT(*) FROM  user WHERE sex = #{user.sex}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;2.设置返回数据为resultMap &ndash;&gt;-->
+<!--    <resultMap id="userResultMap" type="user">-->
+<!--        <id property="id" column="id_"></id>-->
+<!--        <result property="username" column="username_"></result>-->
+<!--        <result property="sex" column="sex_"></result>-->
+<!--        <result property="birthday" column="birthday_"></result>-->
+<!--        <result property="address" column="address_"></result>-->
+<!--    </resultMap>-->
+<!--    <select id="findUserByIdResultMap" parameterType="int" resultMap="userResultMap">-->
+<!--        SELECT-->
+<!--         id id_,-->
+<!--         username username_,-->
+<!--         sex sex_,-->
+<!--         birthday birthday_,-->
+<!--         address address_-->
+<!--        FROM user WHERE id = #{id}-->
+<!--    </select>-->
+
+
+<!--    &lt;!&ndash; 3.if和where的使用&ndash;&gt;-->
+<!--    <sql id="select_user_where">-->
+<!--        <if test="user != null">-->
+<!--            <if test="user.sex != null and user.sex != ''">-->
+<!--                sex = #{user.sex}-->
+<!--            </if>-->
+<!--            <if test="user.username != null and user.username != ''">-->
+<!--                and username LIKE '%${user.username}%'-->
+<!--            </if>-->
+<!--            <if test="user.address != null and user.address != ''">-->
+<!--                and address LIKE '%${user.address}%'-->
+<!--            </if>-->
+<!--        </if>-->
+<!--    </sql>-->
+<!--    <select id="findUserList" parameterType="userQueryVO" resultType="user">-->
+<!--        /*性别和名字*/-->
+<!--        SELECT * FROM user-->
+
+<!--        <where>-->
+<!--            <include refid="select_user_where"/>-->
+<!--        </where>-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 4.foreach使用讲解&ndash;&gt;-->
+<!--    <select id="findUserByIds" parameterType="userQueryVO" resultType="user">-->
+<!--        &lt;!&ndash;性别和名字 SELECT * FROM user WHERE id in (1,2,3) &ndash;&gt;-->
+<!--       SELECT * FROM user-->
+<!--       <where>-->
+<!--           <if test="ids != null and ids.size > 0">-->
+<!--               &lt;!&ndash;-->
+<!--               collection:集合,写集合属性-->
+<!--               item:遍历接收变量-->
+<!--               open:遍历开始-->
+<!--               close：遍历结束-->
+<!--               separator:拼接格式-->
+<!--               for(Integer id : ids){-->
+<!--               }-->
+<!--               &ndash;&gt;-->
+<!--                <foreach collection="ids" item="id" open="id in(" close=")" separator=",">-->
+<!--                    ${id}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+<!--    &lt;!&ndash; 5.参数是数组-->
+<!--        如果参数是数组的话，parameterType可以写全名【java.util.List】，也可以写别名-->
+<!--        遍历或者判断的时候，都用list变量-->
+<!--    &ndash;&gt;-->
+<!--    <select id="findUserByIds2" parameterType="list" resultType="user">-->
+<!--        &lt;!&ndash;性别和名字 SELECT * FROM user WHERE id in (1,2,3) &ndash;&gt;-->
+<!--        SELECT * FROM user-->
+<!--        <where>-->
+<!--            <if test="list != null and list.size > 0">-->
+<!--                <foreach collection="list" item="id" open="id in(" close=")" separator=",">-->
+<!--                    ${id}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+
+<!--    &lt;!&ndash; ==============查询用户信息及用户购买的商品信息============&ndash;&gt;-->
+<!--    <resultMap id="userRslMap" type="user">-->
+<!--        &lt;!&ndash; 1.匹配user属性 &ndash;&gt;-->
+<!--        <id column="id" property="id"></id>-->
+<!--        <result column="username" property="username"/>-->
+<!--        <result column="password" property="password"/>-->
+
+<!--        &lt;!&ndash;2.匹配user的orderList&ndash;&gt;-->
+<!--        <collection property="orderList" ofType="orders">-->
+<!--            <id column="order_id" property="id"></id>-->
+<!--            <result column="number" property="number"/>-->
+<!--            <result column="createtime" property="createtime"/>-->
+<!--            <result column="note" property="note"/>-->
+
+<!--            &lt;!&ndash; 3.匹配Orders里有orderDetails&ndash;&gt;-->
+<!--            <collection property="orderDetails" ofType="orderDetail">-->
+<!--                <id column="detail_id" property="id"></id>-->
+<!--                <result column="items_id" property="itemsId"/>-->
+<!--                <result column="items_num" property="itemsNum"/>-->
+
+<!--                &lt;!&ndash; 4.配置定单详情的商品信息&ndash;&gt;-->
+<!--                <association property="items" javaType="items">-->
+<!--                    <id column="items_id" property="id"/>-->
+<!--                    <result column="name" property="name"/>-->
+<!--                    <result column="price" property="price"/>-->
+<!--                    <result column="detail" property="detail"/>-->
+<!--                </association>-->
+<!--            </collection>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+<!--    <select id="findUserAndOrderInfo" resultMap="userRslMap">-->
+<!--        SELECT-->
+<!--            u.id,-->
+<!--            u.username,-->
+<!--            u.address,-->
+<!--            o.id order_id,-->
+<!--            o.number,-->
+<!--            o.createtime,-->
+<!--            o.note,-->
+<!--            od.id detail_id,-->
+<!--            od.items_id,-->
+<!--            od.items_num,-->
+<!--            it.name,-->
+<!--            it.price,-->
+<!--            it.detail-->
+<!--        FROM-->
+<!--            user u,-->
+<!--            orders o,-->
+<!--            orderdetail od,-->
+<!--          items it-->
+<!--        WHERE-->
+<!--            o.user_id = u.id-->
+<!--          AND o.id = od.orders_id-->
+<!--          AND od.items_id = it.id-->
+<!--    </select>-->
+</mapper>
