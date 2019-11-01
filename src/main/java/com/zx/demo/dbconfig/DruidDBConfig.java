@@ -69,7 +69,7 @@ public class DruidDBConfig {
     @Value("{spring.datasource.connectionProperties}")
     private String connectionProperties;
 
-    @Bean   
+    @Bean
     @Primary
     public DataSource dataSource(){
         DruidDataSource datasource = new DruidDataSource();
@@ -79,7 +79,6 @@ public class DruidDBConfig {
         datasource.setPassword(password);
         datasource.setDriverClassName(driverClassName);
 
-        //configuration
         datasource.setInitialSize(initialSize);
         datasource.setMinIdle(minIdle);
         datasource.setMaxActive(maxActive);

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
-@Controller //声明Rest风格的控制器
+@Controller
 @RequestMapping("worker")
 public class WorkerController {
     @Autowired
